@@ -159,8 +159,7 @@ uint8_t hal_w2_wait_data_ready(void)
     data_ready = (w2_status & W2CON1_FLAG_DATA_READY);
     nack_received = (w2_status & W2CON1_FLAG_NACK);
     delay_us(10);
-  } while (!data_ready);
-
+  } while (!data_ready && (timeout_counter-- != 0));
 
   return w2_status;
 }
@@ -231,8 +230,9 @@ bool hal_w2_read(uint8_t address, uint8_t *data_ptr, uint8_t data_len)
     *data_ptr++ = HAL_W2_READ();
     ack_received = !(w2_status & W2CON1_FLAG_NACK);
   }
+  hal_w2_soft_reset();
 
-  return ack_received;  
+  return ack_received;
 }
 
 void hal_w2_soft_reset()

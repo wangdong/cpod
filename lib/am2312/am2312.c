@@ -34,12 +34,11 @@ void helper_read(uint8_t* buff, uint8_t address, uint8_t firstReg, uint8_t regCo
     buff[0] = PARAM_AM2321_READ;
     buff[1] = firstReg;
     buff[2] = regCount;
-    hal_w2_write(address, buff, 3);
-
-    delay_us(1800);
-
-    // read
-    hal_w2_read(address, buff, 2 + regCount + 2); // cmd + reg Array + crc
+    if (hal_w2_write(address, buff, 3)) {
+        // read
+        delay_us(1600);
+        hal_w2_read(address, buff, 2 + regCount + 2); // cmd + reg Array + crc
+    }
 }
 
 am2312_ACInfo am2312_read_ac() {
