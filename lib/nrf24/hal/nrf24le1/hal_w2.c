@@ -230,7 +230,6 @@ bool hal_w2_read(uint8_t address, uint8_t *data_ptr, uint8_t data_len)
     *data_ptr++ = HAL_W2_READ();
     ack_received = !(w2_status & W2CON1_FLAG_NACK);
   }
-  hal_w2_soft_reset();
 
   return ack_received;
 }
