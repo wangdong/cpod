@@ -7,8 +7,8 @@
 #include <hal_spi.h>
 
 // --------------------------------------------------------
-sbit DISPLAY_RST = P1 ^ 0;
-sbit DISPLAY_DC  = P1 ^ 1;
+sbit DISPLAY_RST = P1 ^ 2;
+sbit DISPLAY_DC  = P1 ^ 3;
 
 // --------------------------------------------------------
 #define LED_IMAGE_WHITE       1
