@@ -18,17 +18,10 @@ typedef struct tagACInfo {
 	bool     isOK;
 	int16_t  temperature;
 	uint16_t humidity;
+	uint16_t crc;
+	uint16_t crcCalc;
 } am2312_ACInfo;
 
-typedef struct tagDeviceInfo {
-	bool     isOK;
-	uint16_t type;
-	uint8_t  version;
-	uint32_t id;
-} am2312_DeviceInfo;
-
-
 am2312_ACInfo am2312_read_ac();
-am2312_DeviceInfo am2312_read_device();
 
 #endif

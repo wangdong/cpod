@@ -60,39 +60,13 @@ am2312_ACInfo am2312_read_ac() {
     info.temperature  = buff[4] << 8;
     info.temperature += buff[5];
 
-    crc  = buff[6] << 8;
-    crc += buff[7];
+    crc  = buff[6] ;
+    crc |= buff[7] << 8;
 
-    info.isOK = crc == helper_crc16(buff+2, 4);
+	info.crc = crc;
+	info.crcCalc = helper_crc16(buff, 6);
+    info.isOK = (info.crc == info.crcCalc);
+
     return info;
 }
 
-am2312_DeviceInfo am2312_read_device() {
-    enum { len = 32 };
-    
-    uint8_t buff[len];
-    uint16_t crc;
-    am2312_DeviceInfo info;
-
-    memset(&buff, 0, len);
-    memset(&info, 0, sizeof(am2312_DeviceInfo));
-
-    helper_read(buff, I2C_ADDR_AM2321, REG_AM2321_DEVICE_TYPE, 7);
-
-    info.type    = buff[2] << 8;
-    info.type   += buff[3];
-
-    info.version = buff[4];
-
-    info.id  = buff[5] << 32;
-    info.id  = buff[6] << 16;
-    info.id  = buff[7] << 8;
-    info.id  = buff[8];
-
-
-    crc  = buff[9] << 8;
-    crc += buff[10];
-
-    info.isOK = crc == helper_crc16(buff+2, 7);
-    return info;
-}

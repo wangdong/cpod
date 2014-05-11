@@ -6,12 +6,14 @@
 
 #include <hal_delay.h>
 #include <hal_spi.h>
+#include <hal_w2.h>
 
 #include <gzll_mcu.h>
 #include <gzll.h>
 #include <gzp.h>
 
 #include <ssd1306.h>
+#include <am2312.h>
 
 // --------------------------------------------------------
 sbit BLINK = P0 ^ 4;
@@ -27,10 +29,10 @@ void main() {
 }
 
 void init() {
-	mcu_init();
-	gzll_init();
-	gzp_init();
-	gzp_pairing_enable(true);
+	// mcu_init();
+	// gzll_init();
+	// gzp_init();
+	// gzp_pairing_enable(true);
 
 	// Open pipe 2. (Pipe 0 and 1 are reserved by pairing library).
 	gzll_set_param(GZLL_PARAM_RX_PIPES, gzll_get_param(GZLL_PARAM_RX_PIPES) | (1 << 2));
@@ -42,10 +44,12 @@ void init() {
 	EA = 1;
 
 	// Enter host mode (start monitoring for data)
-	gzll_rx_start();
+	// gzll_rx_start();
 
 	ssd1306_init();
 	ssd1306_puts_8x16(0,  0, "nRF24LE1");
+
+	hal_w2_configure_master(HAL_W2_100KHZ);
 }
 
 void decode_radio() {
@@ -70,14 +74,26 @@ void decode_radio() {
 	}
 }
 
+enum { ANIM_PROGRESS_KEYFRAME_COUNT = 2 };
+const char* ANIM_PROGRESS_KEYFRAME = "+x";
+int frame_index = 0;
+
 void loop() {	
+	am2312_ACInfo ac;
 	char buff[128] = "";
 
-	decode_radio();
+	ac = am2312_read_ac();
 
-	sprintf(buff, "RX[%d]", payload[0]);
-	ssd1306_puts_8x16(1, 0, buff);
-
-	BLINK = ~BLINK;
-	delay_ms(200);
+	if (ac.isOK) {
+		sprintf(buff, "TEMP: %0.1fC", ac.temperature/10.0f);
+		puts8x16(1, 0, buff);
+		sprintf(buff, "HUMI: %0.1f%c", ac.humidity/10.0f, '%');
+		puts8x16(2, 0, buff);
+	}
+	
+	sprintf(buff, "%c", ANIM_PROGRESS_KEYFRAME[frame_index]);
+	puts8x16(0, 120, buff);
+	frame_index = (frame_index+1) % ANIM_PROGRESS_KEYFRAME_COUNT;
+	
+	delay_ms(1500);
 }
