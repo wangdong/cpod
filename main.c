@@ -1,3 +1,6 @@
+//lint -e534
+//lint -e830
+
 #include <nordic_common.h>
 #include <nrf24le1.h>
 

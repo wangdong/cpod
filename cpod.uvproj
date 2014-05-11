@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>Target 1</TargetName>
+      <TargetName>cpod</TargetName>
       <ToolsetNumber>0x0</ToolsetNumber>
       <ToolsetName>MCS-51</ToolsetName>
       <TargetOption>
@@ -172,15 +172,15 @@
         </Utilities>
         <Target51>
           <Target51Misc>
-            <MemoryModel>1</MemoryModel>
+            <MemoryModel>2</MemoryModel>
             <RTOS>0</RTOS>
-            <RomSize>2</RomSize>
+            <RomSize>1</RomSize>
             <DataHold>0</DataHold>
             <XDataHold>0</XDataHold>
-            <UseOnchipRom>0</UseOnchipRom>
+            <UseOnchipRom>1</UseOnchipRom>
             <UseOnchipArithmetic>0</UseOnchipArithmetic>
-            <UseMultipleDPTR>0</UseMultipleDPTR>
-            <UseOnchipXram>0</UseOnchipXram>
+            <UseMultipleDPTR>1</UseMultipleDPTR>
+            <UseOnchipXram>1</UseOnchipXram>
             <HadIRAM>1</HadIRAM>
             <HadXRAM>1</HadXRAM>
             <HadIROM>1</HadIROM>
@@ -192,8 +192,8 @@
             <Mode2>0</Mode2>
             <useCB>0</useCB>
             <useXB>0</useXB>
-            <useL251>0</useL251>
-            <useA251>0</useA251>
+            <useL251>1</useL251>
+            <useA251>1</useA251>
             <Mx51>0</Mx51>
             <ModC812>0</ModC812>
             <ModCont>0</ModCont>
@@ -203,7 +203,7 @@
             <ModAB2>0</ModAB2>
             <Mx51P>0</Mx51P>
             <hadXRAM2>1</hadXRAM2>
-            <uocXram2>0</uocXram2>
+            <uocXram2>1</uocXram2>
             <ModC2>1</ModC2>
             <ModH2>0</ModH2>
             <Mdu_R515>1</Mdu_R515>
@@ -282,7 +282,7 @@
             </OnChipMemories>
           </Target51Misc>
           <C51>
-            <RegisterColoring>0</RegisterColoring>
+            <RegisterColoring>1</RegisterColoring>
             <VariablesInOrder>0</VariablesInOrder>
             <IntegerPromotion>1</IntegerPromotion>
             <uAregs>0</uAregs>
@@ -292,13 +292,13 @@
             <WarningLevel>2</WarningLevel>
             <SizeSpeed>1</SizeSpeed>
             <ObjectExtend>1</ObjectExtend>
-            <ACallAJmp>0</ACallAJmp>
+            <ACallAJmp>1</ACallAJmp>
             <InterruptVectorAddress>0</InterruptVectorAddress>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>NRF24LE1_32</Define>
+              <Define>EX_PROJ_LE1 NRF24LE1_32</Define>
               <Undefine></Undefine>
-              <IncludePath>.\lib\nrf24\common;.\lib\nrf24\hal;.\lib\am2312;.\lib\gazell\common;.\lib\gazell\nrf24le1;.\lib\SSD1306</IncludePath>
+              <IncludePath>.\params;.\lib\am2312;.\lib\ssd1306;.\lib\am2312;.\lib\nrf24\compiler\common;.\lib\nrf24\assertions;.\lib\nrf24\hal;.\lib\nrf24\hal\nrf24le1;.\lib\nrf24\hal\nrf24l01p;.\lib\nrf24\gazell\common;.\lib\nrf24\gazell\nrf24le1</IncludePath>
             </VariousControls>
           </C51>
           <Ax51>
@@ -318,10 +318,17 @@
             <linkonly>0</linkonly>
             <UseMemoryFromTarget>1</UseMemoryFromTarget>
             <CaseSensitiveSymbols>0</CaseSensitiveSymbols>
-            <WarningLevel>2</WarningLevel>
+            <WarningLevel>0</WarningLevel>
             <DataOverlaying>1</DataOverlaying>
-            <OverlayString></OverlayString>
-            <MiscControls></MiscControls>
+            <OverlayString>?PR?_HAL_NRF_WRITE_REG?HAL_NRF !*,
+?PR?_HAL_NRF_READ_MULTIBYTE_REG?HAL_NRF !*,
+?PR?_GZLL_SET_TIMER_PERIOD?GZLL_MCU !*,
+?PR?_HAL_NRF_SET_POWER_MODE?HAL_NRF !*,
+?PR?_HAL_NRF_SET_RF_CHANNEL?HAL_NRF !*,
+?PR?_HAL_NRF_SET_AUTO_RETR?HAL_NRF !*,
+?PR?_GZLL_START_NEW_TX?GZLL !*,
+?PR?_GZLL_LFSR_GET?GZLL !*</OverlayString>
+            <MiscControls>REMOVEUNUSED</MiscControls>
             <DisableWarningNumbers></DisableWarningNumbers>
             <LinkerCmdFile></LinkerCmdFile>
             <Assign></Assign>
@@ -348,22 +355,27 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>cpod</GroupName>
+          <GroupName>app</GroupName>
           <Files>
             <File>
-              <FileName>cpod.c</FileName>
+              <FileName>main.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\cpod.c</FilePath>
-            </File>
-            <File>
-              <FileName>STARTUP.A51</FileName>
-              <FileType>2</FileType>
-              <FilePath>.\STARTUP.A51</FilePath>
+              <FilePath>.\main.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>nrf24</GroupName>
+          <GroupName>ssd1306</GroupName>
+          <Files>
+            <File>
+              <FileName>ssd1306.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\lib\ssd1306\ssd1306.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>hal</GroupName>
           <Files>
             <File>
               <FileName>hal_delay.c</FileName>
@@ -371,19 +383,89 @@
               <FilePath>.\lib\nrf24\hal\hal_delay.c</FilePath>
             </File>
             <File>
-              <FileName>hal_uart.c</FileName>
+              <FileName>hal_rtc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\lib\nrf24\hal\hal_uart.c</FilePath>
+              <FilePath>.\lib\nrf24\hal\nrf24le1\hal_rtc.c</FilePath>
             </File>
             <File>
-              <FileName>hal_w2.c</FileName>
+              <FileName>hal_nrf.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\lib\nrf24\hal\hal_w2.c</FilePath>
+              <FilePath>.\lib\nrf24\hal\nrf24l01p\hal_nrf.c</FilePath>
+            </File>
+            <File>
+              <FileName>hal_clk.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\lib\nrf24\hal\nrf24le1\hal_clk.c</FilePath>
+            </File>
+            <File>
+              <FileName>hal_aes.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\lib\nrf24\hal\nrf24le1\hal_aes.c</FilePath>
+            </File>
+            <File>
+              <FileName>hal_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\lib\nrf24\hal\nrf24le1\hal_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>hal_rng.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\lib\nrf24\hal\nrf24le1\hal_rng.c</FilePath>
             </File>
             <File>
               <FileName>hal_spi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\lib\nrf24\hal\hal_spi.c</FilePath>
+              <FilePath>.\lib\nrf24\hal\nrf24le1\hal_spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>hal_nrf_hw.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\lib\nrf24\hal\nrf24le1\hal_nrf_hw.c</FilePath>
+            </File>
+            <File>
+              <FileName>hal_w2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\lib\nrf24\hal\nrf24le1\hal_w2.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>gzll</GroupName>
+          <Files>
+            <File>
+              <FileName>gzll.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\lib\nrf24\gazell\common\gzll.c</FilePath>
+            </File>
+            <File>
+              <FileName>gzp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\lib\nrf24\gazell\common\gzp.c</FilePath>
+            </File>
+            <File>
+              <FileName>gzp_host.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\lib\nrf24\gazell\common\gzp_host.c</FilePath>
+            </File>
+            <File>
+              <FileName>gzp_host_le1.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\lib\nrf24\gazell\nrf24le1\gzp_host_le1.c</FilePath>
+            </File>
+            <File>
+              <FileName>gzll_timer_isr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\lib\nrf24\gazell\nrf24le1\gzll_timer_isr.c</FilePath>
+            </File>
+            <File>
+              <FileName>gzll_radio_isr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\lib\nrf24\gazell\nrf24le1\gzll_radio_isr.c</FilePath>
+            </File>
+            <File>
+              <FileName>gzll_mcu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\lib\nrf24\gazell\nrf24le1\gzll_mcu.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -394,16 +476,6 @@
               <FileName>am2312.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\lib\am2312\am2312.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>ssd1306</GroupName>
-          <Files>
-            <File>
-              <FileName>SSD1306.C</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\lib\SSD1306\SSD1306.C</FilePath>
             </File>
           </Files>
         </Group>

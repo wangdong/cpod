@@ -24,6 +24,9 @@ doc/
 *.bak
 *.M51
 *.__*
+*.map
+*.orc
+*.sbr
 
 cpod
 
