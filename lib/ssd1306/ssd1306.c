@@ -666,11 +666,10 @@ void LED_Init() {
 	delay_ms(200);
 	DISPLAY_RST = 1;
 
-
 	hal_spi_master_init(SPI_CLK_DIV2, HAL_SPI_MODE_0, HAL_SPI_MSB_LSB);
 
     SetDisplayOnOff(0x00);     // Display Off (0x00/0x01)
-    SetDisplayClock(0x80);     // Set Clock as 100 Frames/Sec
+    SetDisplayClock(0x40);     // Set Clock as 100 Frames/Sec
     SetMultiplexRatio(0x3F);   // 1/64 Duty (0x0F~0x3F)
     SetDisplayOffset(0x00);    // Shift Mapping RAM Counter (0x00~0x3F)
     SetStartLine(0x00);        // Set Mapping RAM Display Start Line (0x00~0x3F)

@@ -23,16 +23,16 @@ static uint8_t payload[GZLL_MAX_PAYLOAD_LENGTH];
 void init();
 void loop();
 
-void main() {	
+void main() {
 	for (init();;loop());
 }
 
 void init() {
-	
+
 	P1DIR &= ~(BIT_2|BIT_3);
 	P0DIR = 0;
 	P1DIR = 1;
-	
+
 	EA = 1;
 
 	hal_w2_configure_master(HAL_W2_100KHZ);
@@ -41,12 +41,16 @@ void init() {
 	ssd1306_puts_8x16(0, 0, "nRF24LE1");
 }
 
-const char* ANIM_PROGRESS_KEYFRAMES = "><";
+const char* ANIM_PROGRESS_KEYFRAMES[] = {">  ", ">> ", ">>>"};
 int keyframe = 0;
+#define countof(array) (sizeof(array)/sizeof(array[0]))
 
-void loop() {	
+uint16_t stat_error = 0;
+uint16_t stat_all   = 0;
+
+void loop() {
 	am2312_ACInfo ac = {0};
-	char buff[128] = "";
+	char buff[32] = "";
 
 	hal_w2_enable(true);
 	ac = am2312_read_ac();
@@ -59,15 +63,20 @@ void loop() {
 		sprintf(buff, "HUMI: %0.1f%c", ac.humidity/10.0f, '%');
 		puts8x16(2, 0, buff);
 
-		puts6x8(7, 0, " ");
+		puts6x8(7, 122, " ");
 	}
 	else {
-		puts6x8(7, 0, "E");
+		puts6x8(7, 122, "E");
+		++stat_error;
 	}
-	
-	sprintf(buff, "%c", ANIM_PROGRESS_KEYFRAMES[keyframe]);
-	puts8x16(0, 120, buff);
-	keyframe = (keyframe+1) % strlen(ANIM_PROGRESS_KEYFRAMES);
-	
-	delay_s(3);
+
+	sprintf(buff, "%s", ANIM_PROGRESS_KEYFRAMES[keyframe]);
+	puts8x16(0, 98, buff);
+	keyframe = (keyframe+1) % countof(ANIM_PROGRESS_KEYFRAMES);
+
+	stat_all += 1;
+	sprintf(buff, "%d/%d", stat_error, stat_all);
+	puts6x8(7, 0, buff);
+
+	delay_s(2);
 }
